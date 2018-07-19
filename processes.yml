@@ -1,0 +1,33 @@
+apps:
+  - name: AmqpSocketServer
+    script: ./app.js
+    instances: 1
+    listen_timeout: 8000
+    restart_delay: 4000
+    exec_mode: "fork"
+  #  watch     : true
+    autorestart: true
+    error_file: ./logs/error.log
+    out_file: ./logs/out.log
+    log_date_format: "YYYY-MM-DD HH:mm:ss.SSS"
+    env:
+        port: 3000
+        port_ssl: 3001
+        NODE_ENV: "development"
+        BLUEBIRD_W_FORGOTTEN_RETURN: 0
+        amqp: '{
+          "login": "amqp",
+          "password": "secretPassword",
+          "host": "1.1.1.1",
+          "port": "5672",
+          "vhost": "/"
+        }'
+        mongodb: '{
+          "host": "localhost",
+          "port": "27017",
+          "collection": "socket"
+        }'
+        queue: '{
+          "in": "socket_in",
+          "out": "socket_out"
+        }'
